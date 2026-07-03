@@ -1,0 +1,20 @@
+{
+  "name": "convite",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "rm -f dist/assets/*.js dist/assets/*.css",
+    "build": "vite build",
+    "postbuild": "awk '/<body>/{flag=1; next} /<\\/body>/{flag=0} flag' dist/index.html > dist/content.html",
+    "preview": "vite preview",
+    "watch": "node scripts/reload-server.mjs"
+  },
+  "devDependencies": {
+    "vite": "^8.1.0"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0"
+  }
+}
