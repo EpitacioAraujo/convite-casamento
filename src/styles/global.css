@@ -765,9 +765,15 @@ p { font-size: 1rem; color: var(--text-secondary); }
 
 .admin-toolbar { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
 
-.admin-toolbar input {
+.admin-hint { font-size: 0.78rem; color: #888; margin: -6px 0 12px; }
+.row-draggable { cursor: grab; }
+.row-draggable:active { cursor: grabbing; }
+.drag-handle { color: #bbb; cursor: grab; user-select: none; }
+
+.admin-toolbar input, .admin-toolbar select {
   padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color);
   font-size: 0.88rem; flex: 1; min-width: 180px;
+  background: var(--white); font-family: var(--font-sans); height: 37px;
 }
 
 .admin-btn {
@@ -800,12 +806,12 @@ p { font-size: 1rem; color: var(--text-secondary); }
 
 .modal-form { display: flex; flex-direction: column; gap: 16px; }
 
-.modal-form input, .modal-form textarea {
+.modal-form input, .modal-form textarea, .modal-form select {
   padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color);
-  font-size: 0.92rem; width: 100%; font-family: var(--font-sans);
+  font-size: 0.92rem; width: 100%; font-family: var(--font-sans); background: var(--white);
 }
 
-.modal-form input:focus, .modal-form textarea:focus { outline: none; border-color: var(--primary); }
+.modal-form input:focus, .modal-form textarea:focus, .modal-form select:focus { outline: none; border-color: var(--primary); }
 
 .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
 

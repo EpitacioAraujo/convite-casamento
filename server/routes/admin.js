@@ -23,7 +23,8 @@ router.post('/login', async (req, res) => {
 router.use(auth)
 
 router.get('/invites', async (_req, res) => {
-  const [invites] = await pool.execute('SELECT * FROM invites ORDER BY created_at DESC')
+  // ponytail: per-tag manual order; groups blocked together, newest tag-less last
+  const [invites] = await pool.execute('SELECT * FROM invites ORDER BY COALESCE(tag, ""), sort_order, created_at DESC')
   const result = await Promise.all(invites.map(async inv => {
     const [members] = await pool.execute(
       'SELECT id, name, confirmed FROM members WHERE invite_id = ?', [inv.id]
@@ -34,17 +35,30 @@ router.get('/invites', async (_req, res) => {
 })
 
 router.post('/invites', async (req, res) => {
-  const { family_name } = req.body
+  const { family_name, tag } = req.body
   const code = crypto.randomBytes(4).toString('hex').toUpperCase()
-  const [r] = await pool.execute(
-    'INSERT INTO invites (code, family_name) VALUES (?, ?)', [code, family_name]
+  // new invite goes to the end of its group
+  const [[{ next }]] = await pool.execute(
+    'SELECT COALESCE(MAX(sort_order), 0) + 1 AS next FROM invites WHERE tag <=> ?', [tag || null]
   )
-  res.json({ id: r.insertId, code, family_name })
+  const [r] = await pool.execute(
+    'INSERT INTO invites (code, family_name, tag, sort_order) VALUES (?, ?, ?, ?)', [code, family_name, tag || null, next]
+  )
+  res.json({ id: r.insertId, code, family_name, tag: tag || null })
+})
+
+// persist manual order within a group: body { ids: [inviteId, ...] } in the desired order
+router.put('/invites/reorder', async (req, res) => {
+  const { ids } = req.body
+  await Promise.all(ids.map((id, i) =>
+    pool.execute('UPDATE invites SET sort_order = ? WHERE id = ?', [i, id])
+  ))
+  res.json({ ok: true })
 })
 
 router.put('/invites/:id', async (req, res) => {
-  const { family_name } = req.body
-  await pool.execute('UPDATE invites SET family_name = ? WHERE id = ?', [family_name, req.params.id])
+  const { family_name, tag } = req.body
+  await pool.execute('UPDATE invites SET family_name = ?, tag = ? WHERE id = ?', [family_name, tag || null, req.params.id])
   res.json({ ok: true })
 })
 
@@ -94,10 +108,35 @@ router.delete('/gifts/:id', async (req, res) => {
   res.json({ ok: true })
 })
 
-router.get('/stats', async (_req, res) => {
-  const [[{ total_invites }]] = await pool.execute('SELECT COUNT(*) as total_invites FROM invites')
-  const [[{ total_members }]] = await pool.execute('SELECT COUNT(*) as total_members FROM members')
-  const [[{ confirmed }]] = await pool.execute('SELECT COUNT(*) as confirmed FROM members WHERE confirmed = TRUE')
+router.get('/tags', async (_req, res) => {
+  const [tags] = await pool.execute('SELECT * FROM tags ORDER BY name')
+  res.json(tags)
+})
+
+router.post('/tags', async (req, res) => {
+  const { name, color } = req.body
+  const [r] = await pool.execute('INSERT INTO tags (name, color) VALUES (?, ?)', [name, color || '#c9a227'])
+  res.json({ id: r.insertId, name, color: color || '#c9a227' })
+})
+
+router.put('/tags/:id', async (req, res) => {
+  const { name, color } = req.body
+  await pool.execute('UPDATE tags SET name = ?, color = ? WHERE id = ?', [name, color || '#c9a227', req.params.id])
+  res.json({ ok: true })
+})
+
+router.delete('/tags/:id', async (req, res) => {
+  await pool.execute('DELETE FROM tags WHERE id = ?', [req.params.id])
+  res.json({ ok: true })
+})
+
+router.get('/stats', async (req, res) => {
+  const { tag } = req.query
+  const iWhere = tag ? 'WHERE i.tag = ?' : ''
+  const p = tag ? [tag] : []
+  const [[{ total_invites }]] = await pool.execute(`SELECT COUNT(*) as total_invites FROM invites i ${iWhere}`, p)
+  const [[{ total_members }]] = await pool.execute(`SELECT COUNT(*) as total_members FROM members m JOIN invites i ON i.id = m.invite_id ${iWhere}`, p)
+  const [[{ confirmed }]] = await pool.execute(`SELECT COUNT(*) as confirmed FROM members m JOIN invites i ON i.id = m.invite_id ${tag ? 'WHERE i.tag = ? AND' : 'WHERE'} m.confirmed = TRUE`, p)
   res.json({ total_invites, total_members, confirmed, pending: total_members - confirmed })
 })
 

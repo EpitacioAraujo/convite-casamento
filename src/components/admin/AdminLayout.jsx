@@ -15,6 +15,7 @@ export default function AdminLayout() {
         <nav>
           <NavLink to="/admin" end>Dashboard</NavLink>
           <NavLink to="/admin/invites">Convites</NavLink>
+          <NavLink to="/admin/tags">Grupos</NavLink>
           <NavLink to="/admin/gifts">Presentes</NavLink>
         </nav>
       </aside>

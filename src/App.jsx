@@ -14,6 +14,7 @@ import AdminLayout from './components/admin/AdminLayout'
 import LoginPage from './components/admin/LoginPage'
 import DashboardPage from './components/admin/DashboardPage'
 import InvitesPage from './components/admin/InvitesPage'
+import TagsPage from './components/admin/TagsPage'
 import GiftsPage from './components/admin/GiftsPage'
 
 function RequireAuth({ children }) {
@@ -71,6 +72,7 @@ export default function App() {
       <Route path="/admin" element={<RequireAuth><AdminLayout /></RequireAuth>}>
         <Route index element={<DashboardPage />} />
         <Route path="invites" element={<InvitesPage />} />
+        <Route path="tags" element={<TagsPage />} />
         <Route path="gifts" element={<GiftsPage />} />
       </Route>
     </Routes>

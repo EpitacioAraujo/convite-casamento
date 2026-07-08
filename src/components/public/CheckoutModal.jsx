@@ -101,10 +101,32 @@ function PixStep({ total, onDone }) {
   const [copied, setCopied] = useState(false)
 
   function copy() {
-    navigator.clipboard.writeText(pixKey).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 3000)
+    // select the visible text so user can copy manually if API fails
+    const codeEl = document.querySelector('.checkout-pix-key')
+    if (codeEl) {
+      const range = document.createRange()
+      range.selectNodeContents(codeEl)
+      const sel = window.getSelection()
+      sel.removeAllRanges()
+      sel.addRange(range)
+    }
+
+    const tryWrite = navigator.clipboard
+      ? navigator.clipboard.writeText(pixKey)
+      : Promise.reject()
+
+    tryWrite.catch(() => {
+      const el = Object.assign(document.createElement('textarea'), {
+        value: pixKey, style: 'position:fixed;opacity:0'
+      })
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
     })
+
+    setCopied(true)
+    setTimeout(() => setCopied(false), 3000)
   }
 
   return (
