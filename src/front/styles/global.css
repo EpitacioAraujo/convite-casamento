@@ -887,3 +887,19 @@ p { font-size: 1rem; color: var(--text-secondary); }
   .gifts-scroll { gap: 14px; }
   .gift-card { flex: 0 0 180px; }
 }
+
+@keyframes confetti-fall {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(800deg); opacity: 0; }
+}
+.confetti-piece {
+  position: fixed;
+  width: 8px;
+  height: 14px;
+  top: 0;
+  border-radius: 2px;
+  animation: confetti-fall linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}

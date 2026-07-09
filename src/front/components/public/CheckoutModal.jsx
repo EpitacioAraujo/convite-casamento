@@ -30,7 +30,7 @@ export default function CheckoutModal({ onClose }) {
         quantity: 1,
       })),
       orderNsu: `convite-${Date.now()}`,
-      redirectUrl: window.location.href,
+      redirectUrl: `${window.location.origin}/obrigado`,
     })
     clear()
     onClose()
