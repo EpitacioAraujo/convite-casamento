@@ -38,5 +38,14 @@ services:
     networks:
       - convite
 
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: unless-stopped
+    networks:
+      - convite
+    depends_on:
+      - app
+
 networks:
   convite:
