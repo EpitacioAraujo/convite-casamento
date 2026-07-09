@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "node src/serve/index.js",
-    "seed": "node src/serve/seed.js"
+    "migrate": "node src/serve/migrate.js",
+    "seed:list": "node src/serve/seed.js list",
+    "seed:run": "node src/serve/seed.js run"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.18",

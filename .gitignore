@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Segredos e dados do host (nunca versionar)
+.env
+data/

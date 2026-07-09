@@ -2,17 +2,18 @@ services:
   db:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: root_secret
-      MYSQL_DATABASE: convite
-      MYSQL_USER: convite
-      MYSQL_PASSWORD: convite_secret
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS:-root_secret}
+      MYSQL_DATABASE: ${DB_NAME:-convite}
+      MYSQL_USER: ${DB_USER:-convite}
+      MYSQL_PASSWORD: ${DB_PASS:-convite_secret}
     volumes:
-      - db_data:/var/lib/mysql
+      - ${DB_DATA_PATH:-./data}:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       timeout: 3s
       retries: 10
+    restart: unless-stopped
     networks:
       - convite
 
@@ -21,38 +22,21 @@ services:
     environment:
       DB_HOST: db
       DB_PORT: 3306
-      DB_USER: convite
-      DB_PASS: convite_secret
-      DB_NAME: convite
+      DB_USER: ${DB_USER:-convite}
+      DB_PASS: ${DB_PASS:-convite_secret}
+      DB_NAME: ${DB_NAME:-convite}
       JWT_SECRET: ${JWT_SECRET:-change_me_in_production}
       PIX_KEY: ${PIX_KEY:-casamento.epitaciobianca@exemplo.com}
+      INFINITEPAY_HANDLE: ${INFINITEPAY_HANDLE:-}
       PORT: 3001
     ports:
-      - "8081:3001"
+      - "${WEB_PORT:-8081}:3001"
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
     networks:
       - convite
-
-  seed:
-    build: .
-    command: node src/serve/seed.js
-    environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_USER: convite
-      DB_PASS: convite_secret
-      DB_NAME: convite
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - convite
-    restart: "no"
-
-volumes:
-  db_data:
 
 networks:
   convite:
