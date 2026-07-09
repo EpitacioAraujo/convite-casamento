@@ -34,7 +34,10 @@ const CloseIcon = () => (
 
 export default function CartDrawer() {
   const { items, remove, setQty, setCustomValue, clear, total } = useCart()
+  const [open, setOpen] = useState(false)
   const [checkout, setCheckout] = useState(false)
+
+  function openCheckout() { setOpen(false); setCheckout(true) }
 
   function handleFab() {
     if (items.length === 0) {
@@ -45,12 +48,12 @@ export default function CartDrawer() {
 
   return (
     <>
-      <Dialog.Root>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
         {/* FAB — always fixed bottom-right */}
         <Dialog.Trigger asChild>
           <button
             className="cart-fab"
-            onClick={items.length === 0 ? handleFab : undefined}
+            onClick={items.length === 0 ? handleFab : () => setOpen(true)}
             aria-label={items.length > 0 ? 'Abrir carrinho' : 'Ver presentes'}
             // prevent opening dialog when empty
             data-state={items.length === 0 ? 'closed' : undefined}
@@ -108,7 +111,7 @@ export default function CartDrawer() {
                   <span>Total</span>
                   <span className="cart-total-value">{fmt(total)}</span>
                 </div>
-                <button className="btn btn-primary btn-block" onClick={() => setCheckout(true)}>
+                <button className="btn btn-primary btn-block" onClick={openCheckout}>
                   Finalizar Presente
                 </button>
                 <button className="cart-clear-link" onClick={clear}>Limpar carrinho</button>
