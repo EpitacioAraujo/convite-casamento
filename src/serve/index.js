@@ -45,7 +45,7 @@ app.get('/', async (req, res, next) => {
     const indexPath = path.join(__dirname, '../../dist/index.html')
     const { readFileSync } = await import('fs')
     let html = readFileSync(indexPath, 'utf8')
-    const inject = `<script>window.__INVITE=${JSON.stringify(inviteData)};window.__GIFTS=${JSON.stringify(gifts)};window.__PIX_KEY=${JSON.stringify(process.env.PIX_KEY || '')};</script>`
+    const inject = `<script>window.__INVITE=${JSON.stringify(inviteData)};window.__GIFTS=${JSON.stringify(gifts)};window.__PIX_KEY=${JSON.stringify(process.env.PIX_KEY || '')};window.__INFINITEPAY_HANDLE=${JSON.stringify(process.env.INFINITEPAY_HANDLE || '')};</script>`
     html = html.replace('</head>', inject + '</head>')
     res.send(html)
   } catch (e) {

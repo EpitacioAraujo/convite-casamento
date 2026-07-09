@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useCart } from '../../CartContext'
+import { buildCheckoutUrl, toCentsInt } from '../../infinitepay'
 
 function fmt(v) { return 'R$ ' + parseFloat(v).toFixed(2).replace('.', ',') }
 
@@ -79,14 +80,7 @@ export default function CheckoutModal({ onClose }) {
               <h3>Pagar com Cartão</h3>
               <button className="checkout-close" onClick={onClose}>✕</button>
             </div>
-            <div className="checkout-card-body">
-              <p>Você será redirecionado para o ambiente seguro de pagamento.</p>
-              <p className="checkout-amount">{fmt(total)}</p>
-              {/* ponytail: link externo configurado pelo admin futuramente */}
-              <button className="btn btn-primary btn-block" onClick={finish}>
-                Continuar para Pagamento →
-              </button>
-            </div>
+            <CardStep items={items} total={total} onDone={finish} />
           </>
         )}
 
@@ -140,6 +134,41 @@ function PixStep({ total, onDone }) {
       </div>
       <p className="checkout-amount">{fmt(total)}</p>
       <button className="btn btn-primary btn-block" onClick={onDone}>Já realizei o Pix ✓</button>
+    </div>
+  )
+}
+
+function CardStep({ items, total, onDone }) {
+  const handle = window.__INFINITEPAY_HANDLE
+
+  function goToInfinitePay() {
+    const url = buildCheckoutUrl({
+      handle,
+      items: items.map(i => ({
+        name: i.name,
+        price: toCentsInt((parseFloat(i.customValue) || 0) * i.qty),
+        quantity: 1,
+      })),
+      orderNsu: `convite-${Date.now()}`,
+      redirectUrl: window.location.href,
+    })
+    onDone()
+    window.open(url, '_blank')
+  }
+
+  if (!handle) return (
+    <div className="checkout-card-body">
+      <p>Pagamento com cartão indisponível no momento.</p>
+    </div>
+  )
+
+  return (
+    <div className="checkout-card-body">
+      <p>Você será redirecionado para o ambiente seguro de pagamento.</p>
+      <p className="checkout-amount">{fmt(total)}</p>
+      <button className="btn btn-primary btn-block" onClick={goToInfinitePay}>
+        Continuar para Pagamento →
+      </button>
     </div>
   )
 }
