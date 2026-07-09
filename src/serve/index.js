@@ -42,7 +42,7 @@ app.get('/', async (req, res, next) => {
 
     const [gifts] = await pool.execute('SELECT * FROM gifts ORDER BY created_at')
 
-    const indexPath = path.join(__dirname, '../dist/index.html')
+    const indexPath = path.join(__dirname, '../../dist/index.html')
     const { readFileSync } = await import('fs')
     let html = readFileSync(indexPath, 'utf8')
     const inject = `<script>window.__INVITE=${JSON.stringify(inviteData)};window.__GIFTS=${JSON.stringify(gifts)};window.__PIX_KEY=${JSON.stringify(process.env.PIX_KEY || '')};</script>`
@@ -54,7 +54,7 @@ app.get('/', async (req, res, next) => {
 })
 
 // Serve dist in production
-const distPath = path.join(__dirname, '../dist')
+const distPath = path.join(__dirname, '../../dist')
 app.use(express.static(distPath))
 app.use((_req, res) => res.sendFile(path.join(distPath, 'index.html')))
 

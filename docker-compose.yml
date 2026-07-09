@@ -16,10 +16,8 @@ services:
     networks:
       - convite
 
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile.api
+  app:
+    build: .
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -29,6 +27,8 @@ services:
       JWT_SECRET: ${JWT_SECRET:-change_me_in_production}
       PIX_KEY: ${PIX_KEY:-casamento.epitaciobianca@exemplo.com}
       PORT: 3001
+    ports:
+      - "8081:3001"
     depends_on:
       db:
         condition: service_healthy
@@ -36,10 +36,8 @@ services:
       - convite
 
   seed:
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    command: node server/seed.js
+    build: .
+    command: node src/serve/seed.js
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -52,17 +50,6 @@ services:
     networks:
       - convite
     restart: "no"
-
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile.web
-    ports:
-      - "8081:80"
-    depends_on:
-      - api
-    networks:
-      - convite
 
 volumes:
   db_data:

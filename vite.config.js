@@ -6,7 +6,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   resolve: {
-    alias: { '@': path.resolve(import.meta.dirname, './src') }
+    alias: { '@': path.resolve(import.meta.dirname, './src/front') }
   },
   server: {
     proxy: {
