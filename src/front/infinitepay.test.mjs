@@ -9,13 +9,13 @@ assert.equal(toCentsInt('0.1'), 10) // no float drift
 
 const url = buildCheckoutUrl({
   handle: 'joao',
-  items: [{ name: 'Presente', price: 10000, quantity: 1 }],
+  items: [{ description: 'Presente', price: 10000, quantity: 1 }],
   orderNsu: 'abc-123',
   redirectUrl: 'https://ex.com/obrigado',
 })
 const u = new URL(url)
 assert.equal(u.origin + u.pathname, 'https://checkout.infinitepay.io/joao')
-assert.deepEqual(JSON.parse(u.searchParams.get('items')), [{ name: 'Presente', price: 10000, quantity: 1 }])
+assert.deepEqual(JSON.parse(u.searchParams.get('items')), [{ description: 'Presente', price: 10000, quantity: 1 }])
 assert.equal(u.searchParams.get('order_nsu'), 'abc-123')
 assert.equal(u.searchParams.get('redirect_url'), 'https://ex.com/obrigado')
 

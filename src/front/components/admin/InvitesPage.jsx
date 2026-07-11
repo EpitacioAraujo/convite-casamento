@@ -102,7 +102,7 @@ export default function InvitesPage() {
   const filtered = invites.filter(i =>
     i.family_name.toLowerCase().includes(search.toLowerCase()) &&
     (!tagFilter || i.tag === tagFilter) &&
-    (!membersFilter || (membersFilter === 'with' ? i.members.length > 0 : i.members.length === 0))
+    (!membersFilter || (membersFilter === 'with' ? i.members.some(m => m.confirmed) : !i.members.some(m => m.confirmed)))
   )
 
   return (
@@ -120,9 +120,9 @@ export default function InvitesPage() {
           {tags.map(t => <option key={t.id} value={t.name}>{t.name}</option>)}
         </select>
         <select value={membersFilter} onChange={e => setMembersFilter(e.target.value)}>
-          <option value="">Com ou sem convidados</option>
-          <option value="with">Com convidados</option>
-          <option value="without">Sem convidados</option>
+          <option value="">Com ou sem confirmados</option>
+          <option value="with">Com confirmados</option>
+          <option value="without">Sem confirmados</option>
         </select>
         <button className="admin-btn admin-btn-primary" onClick={() => setModal('create')}>+ Novo Convite</button>
       </div>

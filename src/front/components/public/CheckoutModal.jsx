@@ -25,7 +25,7 @@ export default function CheckoutModal({ onClose }) {
     const url = buildCheckoutUrl({
       handle,
       items: items.map(i => ({
-        name: i.name,
+        description: i.name,
         price: toCentsInt((parseFloat(i.customValue) || 0) * i.qty),
         quantity: 1,
       })),
