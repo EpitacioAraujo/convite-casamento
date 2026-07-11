@@ -81,6 +81,11 @@ router.delete('/members/:id', async (req, res) => {
   res.json({ ok: true })
 })
 
+router.post('/invites/:id/unconfirm', async (req, res) => {
+  await pool.execute('UPDATE members SET confirmed = FALSE WHERE invite_id = ?', [req.params.id])
+  res.json({ ok: true })
+})
+
 router.get('/gifts', async (_req, res) => {
   const [gifts] = await pool.execute('SELECT * FROM gifts ORDER BY created_at')
   res.json(gifts)

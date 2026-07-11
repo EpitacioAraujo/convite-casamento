@@ -95,6 +95,15 @@ export default function InvitesPage() {
     setModal(m => ({ ...m, invite: updated }))
   }
 
+  async function unconfirmAll(invite) {
+    if (!confirm(`Desconfirmar todos os membros de "${invite.family_name}"?`)) return
+    await api.unconfirmInvite(invite.id)
+    load()
+    const fresh = await api.adminInvites()
+    const updated = fresh.find(i => i.id === invite.id)
+    setModal(m => ({ ...m, invite: updated }))
+  }
+
   function copyLink(code) {
     navigator.clipboard.writeText(`${location.origin}/?code=${code}`)
   }
@@ -214,6 +223,11 @@ export default function InvitesPage() {
 
       {modal?.type === 'members' && (
         <Modal title={`Membros — ${modal.invite.family_name}`} onClose={() => setModal(null)}>
+          {modal.invite.members.some(m => m.confirmed) && (
+            <button className="admin-btn admin-btn-danger admin-btn-sm" style={{ marginBottom: 12 }} onClick={() => unconfirmAll(modal.invite)}>
+              Desconfirmar todos
+            </button>
+          )}
           <ul style={{ listStyle: 'none', marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
             {modal.invite.members.map(m => (
               <li key={m.id} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.9rem' }}>

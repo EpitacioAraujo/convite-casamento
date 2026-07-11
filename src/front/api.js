@@ -29,6 +29,7 @@ export const api = {
   reorderInvites: ids => req('/admin/invites/reorder', { method: 'PUT', body: { ids } }),
   addMember: (invite_id, name) => req(`/admin/invites/${invite_id}/members`, { method: 'POST', body: { name } }),
   deleteMember: id => req(`/admin/members/${id}`, { method: 'DELETE' }),
+  unconfirmInvite: id => req(`/admin/invites/${id}/unconfirm`, { method: 'POST' }),
   adminGifts: () => req('/admin/gifts'),
   createGift: gift => req('/admin/gifts', { method: 'POST', body: gift }),
   updateGift: (id, gift) => req(`/admin/gifts/${id}`, { method: 'PUT', body: gift }),
