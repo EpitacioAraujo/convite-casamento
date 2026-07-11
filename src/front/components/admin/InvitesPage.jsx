@@ -17,6 +17,7 @@ export default function InvitesPage() {
   const [tags, setTags] = useState([])
   const [search, setSearch] = useState('')
   const [tagFilter, setTagFilter] = useState('')
+  const [membersFilter, setMembersFilter] = useState('')
   const [modal, setModal] = useState(null) // null | 'create' | { type: 'edit'|'members', invite }
   const [dragId, setDragId] = useState(null)
 
@@ -100,7 +101,8 @@ export default function InvitesPage() {
 
   const filtered = invites.filter(i =>
     i.family_name.toLowerCase().includes(search.toLowerCase()) &&
-    (!tagFilter || i.tag === tagFilter)
+    (!tagFilter || i.tag === tagFilter) &&
+    (!membersFilter || (membersFilter === 'with' ? i.members.length > 0 : i.members.length === 0))
   )
 
   return (
@@ -116,6 +118,11 @@ export default function InvitesPage() {
         <select value={tagFilter} onChange={e => setTagFilter(e.target.value)}>
           <option value="">Todos os grupos</option>
           {tags.map(t => <option key={t.id} value={t.name}>{t.name}</option>)}
+        </select>
+        <select value={membersFilter} onChange={e => setMembersFilter(e.target.value)}>
+          <option value="">Com ou sem convidados</option>
+          <option value="with">Com convidados</option>
+          <option value="without">Sem convidados</option>
         </select>
         <button className="admin-btn admin-btn-primary" onClick={() => setModal('create')}>+ Novo Convite</button>
       </div>

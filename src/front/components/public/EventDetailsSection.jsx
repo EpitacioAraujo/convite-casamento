@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const MAPS_URL = 'https://www.google.com/maps?q=Av.+Benjamim+Brasil,+570+-+Maraponga,+Fortaleza+-+CE,+60762-080'
 const WAZE_URL = 'https://waze.com/ul?q=Av.+Benjamim+Brasil,+570+-+Maraponga,+Fortaleza+-+CE,+60762-080'
-const ADDRESS = 'Av. Benjamim Brasil, 570 — Maraponga, Fortaleza - CE, 60762-080'
+const ADDRESS = 'Av. Benjamim Brasil, 570 — Maraponga, Fortaleza - CE'
 
 export default function EventDetailsSection() {
   useEffect(() => {
@@ -33,7 +33,8 @@ export default function EventDetailsSection() {
               <img src="/icons/calendar.png" alt="Calendário" />
             </div>
             <h3>A Cerimônia</h3>
-            <p className="time">Quarta-feira, às 16:30h</p>
+            <p className="venue">Garden Buffet</p>
+            <p className="time">Quarta-feira, às 17:00h</p>
             <p className="venue">Cerimônia e Recepção no mesmo local</p>
             <p className="address">{ADDRESS}</p>
             <div className="card-actions">

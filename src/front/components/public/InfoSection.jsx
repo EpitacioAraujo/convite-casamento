@@ -5,27 +5,19 @@ export default function InfoSection() {
         <div className="info-grid">
           <div className="info-card">
             <h3>Traje: Esporte Fino</h3>
-            <p>Recomendamos que nossos convidados usem trajes no estilo <b>Esporte Fino</b>.</p>
-            <ul className="info-list">
-              <li><b>Para elas:</b> Vestidos curtos ou midi, macacões sofisticados, tecidos leves e fluidos.</li>
-              <li><b>Para eles:</b> Calça social ou de sarja, camisa social, paletó (opcional, sem necessidade de gravata).</li>
-              <li><b>Dica:</b> O local da recepção possui áreas gramadas, sugerimos saltos mais grossos para maior conforto.</li>
-            </ul>
+            <p>Queremos que todos estejam confortáveis e elegantes para celebrar esse momento conosco. Por isso recomendamos que todos os convidados usem roupas no estilo esporte fino.</p>
+            <p style={{ marginTop: '0.75rem' }}><b>Importante:</b> As madrinhas usarão amarelo manteiga. Com carinho pedimos que as convidadas optem por outras cores. Os padrinhos terno na cor azul marinho e gravata champagne ou parecido.</p>
           </div>
           <div className="info-card">
             <h3>Dicas Importantes</h3>
             <ul className="info-list faq-list">
               <li>
-                <b>Hospedagem próxima:</b>
-                <p>Para quem vem de fora de Fortaleza, há diversas opções de hotéis na região da Maraponga.</p>
-              </li>
-              <li>
                 <b>Confirmação obrigatória:</b>
-                <p>Pedimos a gentileza de confirmar até o dia 21 de setembro para dimensionarmos o buffet.</p>
+                <p>Pedimos a gentileza de confirmar até o dia <strong>03/08</strong> para dimensionarmos o buffet.</p>
               </li>
               <li>
                 <b>Estacionamento:</b>
-                <p>O local da recepção possui serviço de valet gratuito com estacionamento seguro no local.</p>
+                <p>O evento é realizado em uma avenida onde é possível estacionar nas proximidades.</p>
               </li>
             </ul>
           </div>

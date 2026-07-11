@@ -585,6 +585,14 @@ p { font-size: 1rem; color: var(--text-secondary); }
 .gifts-scroll::-webkit-scrollbar-track { background: transparent; }
 .gifts-scroll::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
+.gifts-scroll-hint {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  letter-spacing: 0.03em;
+}
+
 .gift-card {
   flex: 0 0 220px;
   scroll-snap-align: start;

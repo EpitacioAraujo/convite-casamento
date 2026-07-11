@@ -32,6 +32,7 @@ export default function GiftsSection() {
         </div>
 
         {gifts.length > 0 ? (
+          <>
           <div className="gifts-scroll">
             {gifts.map(g => {
               const chosen = !!g.chosen_by
@@ -41,7 +42,6 @@ export default function GiftsSection() {
                   <div className="gift-card-body">
                     <span className="gift-card-name">{g.name}</span>
                     <span className="gift-card-value">{fmt(g.value)}</span>
-                    {g.link && <a href={g.link} target="_blank" rel="noreferrer" className="gift-link">Ver produto →</a>}
                   </div>
                   <div className="gift-card-footer">
                     {chosen ? (
@@ -56,6 +56,8 @@ export default function GiftsSection() {
               )
             })}
           </div>
+          <p className="gifts-scroll-hint">← deslize para ver mais presentes →</p>
+          </>
         ) : (
           <p style={{ textAlign: 'center', marginTop: 40, fontStyle: 'italic', fontFamily: 'var(--font-serif)' }}>
             A lista de presentes será divulgada em breve.
