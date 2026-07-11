@@ -6,7 +6,7 @@ export default function InfoSection() {
           <div className="info-card">
             <h3>Traje: Esporte Fino</h3>
             <p>Queremos que todos estejam confortáveis e elegantes para celebrar esse momento conosco. Por isso recomendamos que todos os convidados usem roupas no estilo esporte fino.</p>
-            <p style={{ marginTop: '0.75rem' }}><b>Importante:</b> As madrinhas usarão amarelo manteiga. Com carinho pedimos que as convidadas optem por outras cores. Os padrinhos terno na cor azul marinho e gravata champagne ou parecido.</p>
+            <p style={{ marginTop: '0.75rem' }}><b>Importante:</b> As madrinhas usarão amarelo manteiga. Com carinho pedimos que as convidadas optem por outras cores. Os padrinhos terno na cor preta e gravata amarelo claro/champagne ou parecido.</p>
           </div>
           <div className="info-card">
             <h3>Dicas Importantes</h3>
