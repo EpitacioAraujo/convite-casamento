@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { api } from '../../api'
 
 function CurrencyInput({ name, defaultValue }) {
@@ -79,13 +80,13 @@ export default function GiftsPage() {
           <tbody>
             {gifts.map(g => (
               <tr key={g.id}>
-                <td>{g.name}</td>
-                <td>R$ {parseFloat(g.value).toFixed(2).replace('.', ',')}</td>
-                <td>{g.link ? <a href={g.link} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', fontSize: '0.8rem' }}>link</a> : '—'}</td>
-                <td>{g.chosen_by || '—'}</td>
-                <td style={{ display: 'flex', gap: 6 }}>
-                  <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => setModal(g)}>Editar</button>
-                  <button className="admin-btn admin-btn-danger admin-btn-sm" onClick={() => del(g.id)}>Del</button>
+                <td className="cell-primary">{g.name}</td>
+                <td className="cell-badge">R$ {parseFloat(g.value).toFixed(2).replace('.', ',')}</td>
+                <td className="cell-meta">{g.link ? <a href={g.link} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', fontSize: '0.8rem' }}>link</a> : '—'}</td>
+                <td className="cell-meta">{g.chosen_by || '—'}</td>
+                <td className="cell-actions" style={{ display: 'flex', gap: 15 }}>
+                  <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Editar" aria-label="Editar" onClick={() => setModal(g)}><Pencil size={18} /></button>
+                  <button className="admin-btn admin-btn-danger admin-btn-icon" title="Deletar" aria-label="Deletar" onClick={() => del(g.id)}><Trash2 size={18} /></button>
                 </td>
               </tr>
             ))}

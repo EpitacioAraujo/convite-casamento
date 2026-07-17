@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { api } from '../../api'
 
 function Modal({ title, onClose, children }) {
@@ -51,11 +52,11 @@ export default function TagsPage() {
           <tbody>
             {tags.map(t => (
               <tr key={t.id}>
-                <td><span className="badge" style={{ background: t.color, color: '#fff' }}>{t.name}</span></td>
-                <td><code style={{ fontSize: '0.8rem' }}>{t.color}</code></td>
-                <td style={{ display: 'flex', gap: 6 }}>
-                  <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => setModal(t)}>Editar</button>
-                  <button className="admin-btn admin-btn-danger admin-btn-sm" onClick={() => del(t.id)}>Del</button>
+                <td className="cell-primary"><span className="badge" style={{ background: t.color, color: '#fff' }}>{t.name}</span></td>
+                <td className="cell-meta"><code style={{ fontSize: '0.8rem' }}>{t.color}</code></td>
+                <td className="cell-actions" style={{ display: 'flex', gap: 15 }}>
+                  <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Editar" aria-label="Editar" onClick={() => setModal(t)}><Pencil size={18} /></button>
+                  <button className="admin-btn admin-btn-danger admin-btn-icon" title="Deletar" aria-label="Deletar" onClick={() => del(t.id)}><Trash2 size={18} /></button>
                 </td>
               </tr>
             ))}

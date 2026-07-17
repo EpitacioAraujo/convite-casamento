@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link as LinkIcon, Users, Pencil, Trash2 } from 'lucide-react'
 import { api } from '../../api'
 
 function Modal({ title, onClose, children }) {
@@ -149,7 +150,6 @@ export default function InvitesPage() {
               <th>Família</th>
               <th>Grupo</th>
               <th>Código</th>
-              <th>Membros</th>
               <th>Confirmados</th>
               <th>Ações</th>
             </tr>
@@ -167,20 +167,19 @@ export default function InvitesPage() {
                   className={canReorder ? 'row-draggable' : undefined}
                   style={dragId === inv.id ? { opacity: 0.5 } : undefined}
                 >
-                  <td>{canReorder && <span className="drag-handle">⠿</span>} {inv.family_name}</td>
-                  <td>{inv.tag ? <span className="badge" style={{ background: tagColor(inv.tag), color: '#fff' }}>{inv.tag}</span> : <span style={{ color: '#999' }}>—</span>}</td>
-                  <td><span className="invite-link-code">{inv.code}</span></td>
-                  <td>{inv.members.length}</td>
-                  <td>
+                  <td className="cell-primary">{canReorder && <span className="drag-handle">⠿</span>} {inv.family_name}</td>
+                  <td className="cell-meta">{inv.tag ? <span className="badge" style={{ background: tagColor(inv.tag), color: '#fff' }}>{inv.tag}</span> : <span style={{ color: '#999' }}>—</span>}</td>
+                  <td className="cell-meta"><span className="invite-link-code">{inv.code}</span></td>
+                  <td className="cell-badge">
                     <span className={`badge ${confirmed === inv.members.length && inv.members.length > 0 ? 'badge-green' : 'badge-yellow'}`}>
                       {confirmed}/{inv.members.length}
                     </span>
                   </td>
-                  <td style={{ display: 'flex', gap: 6 }}>
-                    <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => copyLink(inv.code)}>Copiar Link</button>
-                    <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => setModal({ type: 'members', invite: inv })}>Membros</button>
-                    <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => setModal({ type: 'edit', invite: inv })}>Editar</button>
-                    <button className="admin-btn admin-btn-danger admin-btn-sm" onClick={() => del(inv.id)}>Del</button>
+                  <td className="cell-actions" style={{ display: 'flex', gap: 15 }}>
+                    <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Copiar Link" aria-label="Copiar Link" onClick={() => copyLink(inv.code)}><LinkIcon size={18} /></button>
+                    <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Membros" aria-label="Membros" onClick={() => setModal({ type: 'members', invite: inv })}><Users size={18} /></button>
+                    <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Editar" aria-label="Editar" onClick={() => setModal({ type: 'edit', invite: inv })}><Pencil size={18} /></button>
+                    <button className="admin-btn admin-btn-danger admin-btn-icon" title="Deletar" aria-label="Deletar" onClick={() => del(inv.id)}><Trash2 size={18} /></button>
                   </td>
                 </tr>
               )
