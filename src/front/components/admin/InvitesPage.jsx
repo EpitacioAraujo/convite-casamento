@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link as LinkIcon, Users, Pencil, Trash2 } from 'lucide-react'
+import { Link as LinkIcon, MessageSquareText, Users, Pencil, Trash2 } from 'lucide-react'
 import { api } from '../../api'
+
+function fillTemplate(body, invite) {
+  return body
+    .replaceAll('@{link}', `${location.origin}/?code=${invite.code}`)
+    .replaceAll('@{familia}', invite.family_name)
+    .replaceAll('@{convidados}', invite.members.map(m => m.name).join(', '))
+}
 
 function Modal({ title, onClose, children }) {
   return (
@@ -19,10 +26,11 @@ export default function InvitesPage() {
   const [search, setSearch] = useState('')
   const [tagFilter, setTagFilter] = useState('')
   const [membersFilter, setMembersFilter] = useState('')
-  const [modal, setModal] = useState(null) // null | 'create' | { type: 'edit'|'members', invite }
+  const [modal, setModal] = useState(null) // null | 'create' | { type: 'edit'|'members'|'message', invite }
   const [dragId, setDragId] = useState(null)
+  const [templates, setTemplates] = useState([])
 
-  useEffect(() => { load(); api.adminTags().then(setTags) }, [])
+  useEffect(() => { load(); api.adminTags().then(setTags); api.adminTemplates().then(setTemplates) }, [])
 
   const invitesRef = useRef([])
   useEffect(() => { invitesRef.current = invites }, [invites])
@@ -109,6 +117,11 @@ export default function InvitesPage() {
     navigator.clipboard.writeText(`${location.origin}/?code=${code}`)
   }
 
+  function copyMessage(invite, template) {
+    navigator.clipboard.writeText(fillTemplate(template.body, invite))
+    setModal(null)
+  }
+
   const filtered = invites.filter(i =>
     i.family_name.toLowerCase().includes(search.toLowerCase()) &&
     (!tagFilter || i.tag === tagFilter) &&
@@ -177,6 +190,7 @@ export default function InvitesPage() {
                   </td>
                   <td className="cell-actions" style={{ display: 'flex', gap: 15 }}>
                     <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Copiar Link" aria-label="Copiar Link" onClick={() => copyLink(inv.code)}><LinkIcon size={18} /></button>
+                    <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Copiar Mensagem" aria-label="Copiar Mensagem" onClick={() => setModal({ type: 'message', invite: inv })}><MessageSquareText size={18} /></button>
                     <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Membros" aria-label="Membros" onClick={() => setModal({ type: 'members', invite: inv })}><Users size={18} /></button>
                     <button className="admin-btn admin-btn-ghost admin-btn-icon" title="Editar" aria-label="Editar" onClick={() => setModal({ type: 'edit', invite: inv })}><Pencil size={18} /></button>
                     <button className="admin-btn admin-btn-danger admin-btn-icon" title="Deletar" aria-label="Deletar" onClick={() => del(inv.id)}><Trash2 size={18} /></button>
@@ -245,6 +259,32 @@ export default function InvitesPage() {
               <button type="submit" className="admin-btn admin-btn-primary">+ Adicionar</button>
             </div>
           </form>
+        </Modal>
+      )}
+
+      {modal?.type === 'message' && (
+        <Modal title={`Copiar mensagem — ${modal.invite.family_name}`} onClose={() => setModal(null)}>
+          {templates.length === 0 ? (
+            <p className="admin-hint">Nenhum modelo cadastrado. Crie um em "Modelos de Mensagem".</p>
+          ) : (
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {templates.map(t => (
+                <li key={t.id}>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn-ghost"
+                    style={{ width: '100%', textAlign: 'left' }}
+                    onClick={() => copyMessage(modal.invite, t)}
+                  >
+                    {t.title}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="modal-actions">
+            <button type="button" className="admin-btn admin-btn-ghost" onClick={() => setModal(null)}>Fechar</button>
+          </div>
         </Modal>
       )}
     </>

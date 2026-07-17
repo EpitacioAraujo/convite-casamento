@@ -135,6 +135,28 @@ router.delete('/tags/:id', async (req, res) => {
   res.json({ ok: true })
 })
 
+router.get('/templates', async (_req, res) => {
+  const [templates] = await pool.execute('SELECT * FROM message_templates ORDER BY title')
+  res.json(templates)
+})
+
+router.post('/templates', async (req, res) => {
+  const { title, body } = req.body
+  const [r] = await pool.execute('INSERT INTO message_templates (title, body) VALUES (?, ?)', [title, body])
+  res.json({ id: r.insertId, title, body })
+})
+
+router.put('/templates/:id', async (req, res) => {
+  const { title, body } = req.body
+  await pool.execute('UPDATE message_templates SET title = ?, body = ? WHERE id = ?', [title, body, req.params.id])
+  res.json({ ok: true })
+})
+
+router.delete('/templates/:id', async (req, res) => {
+  await pool.execute('DELETE FROM message_templates WHERE id = ?', [req.params.id])
+  res.json({ ok: true })
+})
+
 router.get('/stats', async (req, res) => {
   const { tag } = req.query
   const iWhere = tag ? 'WHERE i.tag = ?' : ''

@@ -16,6 +16,7 @@ import DashboardPage from './components/admin/DashboardPage'
 import InvitesPage from './components/admin/InvitesPage'
 import TagsPage from './components/admin/TagsPage'
 import GiftsPage from './components/admin/GiftsPage'
+import TemplatesPage from './components/admin/TemplatesPage'
 
 function RequireAuth({ children }) {
   return localStorage.getItem('admin_token') ? children : <Navigate to="/admin/login" replace />
@@ -114,6 +115,7 @@ export default function App() {
         <Route path="invites" element={<InvitesPage />} />
         <Route path="tags" element={<TagsPage />} />
         <Route path="gifts" element={<GiftsPage />} />
+        <Route path="templates" element={<TemplatesPage />} />
       </Route>
     </Routes>
   )

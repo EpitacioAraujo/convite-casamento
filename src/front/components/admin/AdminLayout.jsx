@@ -24,6 +24,7 @@ export default function AdminLayout() {
           <NavLink to="/admin/invites" onClick={closeMenu}>Convites</NavLink>
           <NavLink to="/admin/tags" onClick={closeMenu}>Grupos</NavLink>
           <NavLink to="/admin/gifts" onClick={closeMenu}>Presentes</NavLink>
+          <NavLink to="/admin/templates" onClick={closeMenu}>Modelos de Mensagem</NavLink>
         </nav>
       </aside>
       <div className="admin-main">

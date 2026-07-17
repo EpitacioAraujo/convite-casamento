@@ -51,6 +51,14 @@ export async function migrate() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `)
+  await pool.execute(`
+    CREATE TABLE IF NOT EXISTS message_templates (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      body TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `)
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

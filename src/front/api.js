@@ -39,4 +39,8 @@ export const api = {
   updateTag: (id, name, color) => req(`/admin/tags/${id}`, { method: 'PUT', body: { name, color } }),
   deleteTag: id => req(`/admin/tags/${id}`, { method: 'DELETE' }),
   stats: tag => req(`/admin/stats${tag ? `?tag=${encodeURIComponent(tag)}` : ''}`),
+  adminTemplates: () => req('/admin/templates'),
+  createTemplate: (title, body) => req('/admin/templates', { method: 'POST', body: { title, body } }),
+  updateTemplate: (id, title, body) => req(`/admin/templates/${id}`, { method: 'PUT', body: { title, body } }),
+  deleteTemplate: id => req(`/admin/templates/${id}`, { method: 'DELETE' }),
 }
